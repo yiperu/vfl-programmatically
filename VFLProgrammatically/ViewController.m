@@ -11,7 +11,10 @@
 @interface ViewController ()
 @property (nonatomic, strong) UIView *redView;
 @property (nonatomic, strong) UIView *yellowView;
+
+@property (nonatomic, strong) UILabel *label;
 @end
+
 
 @implementation ViewController
 
@@ -41,7 +44,12 @@
     //    [self example_5];
     
     // Example 6: Defining constraints through relations
-    [self example_6];
+//    [self example_6];
+    
+    // Otras formas de definir los constraints
+//    [self example_7];
+    [self example_8];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,6 +73,14 @@
     [self.view addSubview:self.redView];
     [self.view addSubview:self.yellowView];
     
+    // Agregaremos Label para los ejemploe > 6
+    self.label = [UILabel new];
+    self.label.translatesAutoresizingMaskIntoConstraints = NO;
+    self.label.text = @"Esto es un Label";
+    self.label.font = [UIFont systemFontOfSize:18];
+    self.label.backgroundColor = [UIColor lightGrayColor];
+    
+    [self.view addSubview:self.label];
 }
 
 /*
@@ -393,6 +409,7 @@
                               attribute:NSLayoutAttributeWidth
                               multiplier:0.5
                               constant:0.0]];
+    // yellowView.width = redView.width * 0.5 + 0.0;
     
     [self.view addConstraint:[NSLayoutConstraint
                               constraintWithItem:self.yellowView
@@ -422,7 +439,69 @@
                               multiplier:1.0
                               constant:0.0]];
     
+//    yellowView.center.x = redView.center.x * 1.0 + 0.0;
+//    yellowView.center.y = redView.center.y * 1.0 + 0.0;
+    
 }
+
+- (void)example_7 {
+    
+    NSDictionary *viewsDictionary = @{@"label":self.label};
+    
+//    NSArray *constraint_Ancho = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[label(300)]"
+//                                                                    options:0
+//                                                                    metrics:nil
+//                                                                      views:viewsDictionary];
+//    
+//    // Definimos el Ancho o Width
+//    NSArray *constraint_Alto = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[label(100)]"
+//                                                                    options:0
+//                                                                    metrics:nil
+//                                                                      views:viewsDictionary];
+//    [self.label addConstraints:constraint_Ancho];
+//    [self.label addConstraints:constraint_Alto];
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+    //Posicion
+    
+//    NSArray *constraints = [NSLayoutConstraint
+//                            constraintsWithVisualFormat:@"V:|-offsetTop-[label]"
+//                            options:0
+//                            metrics:@{@"offsetTop": @100}
+//                            views:NSDictionaryOfVariableBindings(self.label)];
+    
+    NSArray *constraints = [NSLayoutConstraint
+                            constraintsWithVisualFormat:@"V:|-offsetTop-[label]"
+                            options:0
+                            metrics:@{@"offsetTop": @100}
+                            views:viewsDictionary];
+    
+    [self.view addConstraints:constraints];
+}
+
+-(void)example_8{
+
+    NSDictionary *viewsDictionary = @{@"redView": self.redView, @"yellowView": self.yellowView, @"label":self.label};
+    
+    NSArray * anchov01 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[redView(50)]" options:0 metrics:nil views:viewsDictionary];
+    NSArray * altov01 =  [NSLayoutConstraint constraintsWithVisualFormat:@"V:[redView(50)]" options:0 metrics:nil views:viewsDictionary];
+    [self.redView addConstraints:anchov01];
+    [self.redView addConstraints:altov01];
+    
+//    NSArray * anchov02 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[yellowView(50)]" options:0 metrics:nil views:viewsDictionary];
+//    NSArray * altov02 =  [NSLayoutConstraint constraintsWithVisualFormat:@"V:[yellowView(50)]" options:0 metrics:nil views:viewsDictionary];
+//    [self.yellowView addConstraints:anchov02];
+//    [self.yellowView addConstraints:altov02];
+    // - - - - - --
+    [self.view addConstraints:[NSLayoutConstraint
+                               constraintsWithVisualFormat:@"H:|[redView][label][yellowView(==redView)]|"
+                               options:0
+                               metrics:nil
+                               views:viewsDictionary]];
+    //NSDictionaryOfVariableBindings(label, spacer1, spacer2)
+
+}
+
 
 
 @end
